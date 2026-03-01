@@ -1,0 +1,42 @@
+{
+    "profiles": [
+        {
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "Modify Ctrl-W",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "w",
+                                    "modifiers": { "mandatory": ["left_control"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "delete_or_backspace",
+                                        "modifiers": ["left_option"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "devices": [
+                {
+                    "identifiers": { "is_keyboard": true },
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "caps_lock" },
+                            "to": [{ "key_code": "left_control" }]
+                        }
+                    ]
+                }
+            ],
+            "name": "Default profile",
+            "selected": true,
+            "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+        }
+    ]
+}

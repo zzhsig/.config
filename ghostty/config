@@ -1,0 +1,40 @@
+# =============================================================================
+# Ghostty config — optimized for Neovim + tmux + Claude Code
+# =============================================================================
+
+# Font
+font-family = JetBrainsMono Nerd Font
+font-size = 13
+
+# Theme (Catppuccin Mocha — matches LazyVim default)
+theme = Catppuccin Mocha
+
+# Window
+window-padding-x = 8
+window-padding-y = 8
+window-decoration = true
+
+# Terminal behavior
+mouse-hide-while-typing = true
+copy-on-select = false
+
+# Shell integration (enables better tmux detection)
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# Scrollback (tmux handles this, keep it minimal)
+scrollback-limit = 10000
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+macos-icon = custom-style                                                                                                                                                       
+macos-icon-frame = none                          
+macos-icon-ghost-color = blue                
+macos-icon-screen-color = gray
+# Key bindings — leave Ctrl+a free for tmux prefix
+# (Ghostty doesn't intercept Ctrl+a by default)
+
+# Send clean <M-BS> (ESC+DEL) for Option+Delete so Neovim can map it reliably
+keybind = opt+backspace=text:\x1b\x7f
