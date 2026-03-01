@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a macOS dotfiles repository (`~/.config`) managing configuration for: Neovim, Ghostty terminal, Karabiner-Elements, GitHub CLI, Git, and uv (Python package manager).
+This is a macOS dotfiles repository (`~/.config`) managing configuration for: Neovim, Ghostty terminal, tmux, Karabiner-Elements, GitHub CLI, Git, and uv (Python package manager).
 
 ## Architecture
 
@@ -13,6 +13,7 @@ Each subdirectory is an independent tool's config:
 - **`nvim/`** — LazyVim-based Neovim config (Lua). Has its own `CLAUDE.md` with detailed guidance. Plugin specs live in `nvim/lua/plugins/`. Format Lua with `stylua lua/` (2-space indent, 120 col — see `nvim/stylua.toml`).
 - **`ghostty/config`** — Ghostty terminal config. Catppuccin Mocha theme, JetBrainsMono Nerd Font. Leaves Ctrl+a free for tmux prefix. Sends `ESC+DEL` for Option+Backspace so Neovim receives `<M-BS>`.
 - **`karabiner/karabiner.json`** — System-wide keyboard remapping. Caps Lock → Left Control. Ctrl-G → Escape. Emacs-style Ctrl+N/P/B → Down/Up/Left arrows. Ctrl-W → Option+Delete (word-delete) everywhere except Ghostty.
+- **`tmux/tmux.conf`** — tmux config. Prefix is Ctrl+t. Catppuccin Mocha status bar. Vim-aware pane navigation with Ctrl+h/j/k/l. Symlinked from `~/.tmux.conf`.
 - **`gh/config.yml`** — GitHub CLI. Uses HTTPS protocol. Alias: `gh co` → `gh pr checkout`.
 - **`git/ignore`** — Global gitignore (ignores `.claude/settings.local.json`).
 - **`uv/`** — uv Python package manager receipt (installed to `~/.local/bin`).
