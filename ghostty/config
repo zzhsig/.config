@@ -22,9 +22,6 @@ copy-on-select = false
 shell-integration = zsh
 shell-integration-features = cursor,sudo,title
 
-# Auto-start tmux (attach to existing "main" session or create it)
-# command = tmux new-session -A -s main
-
 # Scrollback (tmux handles this, keep it minimal)
 scrollback-limit = 10000
 
