@@ -14,3 +14,6 @@ vim.keymap.set("i", "<C-e>", "<End>", { desc = "Go to end of line" })
 
 -- Backward delete word (Karabiner sends Option+Delete for Ctrl-W, which arrives as <M-BS>)
 vim.keymap.set("i", "<M-BS>", "<C-w>", { desc = "Backward delete word" })
+
+-- Format selected JSON with jq
+vim.keymap.set("v", "<leader>jq", "!jq .<CR>", { desc = "Format JSON" })

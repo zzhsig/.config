@@ -1,0 +1,40 @@
+#!/bin/bash
+# Handler for nvim://file/<path>:<line>:<column> URLs
+# Opens the file in an existing nvim inside tmux, or starts a new one.
+
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:$PATH"
+
+URL="${1:?Usage: open-in-nvim <nvim-url>}"
+NVIM_SOCK="/tmp/nvim-server.sock"
+
+# Strip scheme: nvim://file/path/to/file:line:column
+path_info="${URL#nvim://file}"
+
+# Parse line and column from the right (file paths don't contain colons on macOS)
+column="${path_info##*:}"
+rest="${path_info%:*}"
+line="${rest##*:}"
+filepath="${rest%:*}"
+# Normalize double slash from nvim://file//Users/... -> /Users/...
+while [[ "$filepath" == //* ]]; do filepath="${filepath#/}"; done
+
+# Check tmux is running
+if ! tmux has-session 2>/dev/null; then
+  exit 1
+fi
+
+# Try existing nvim, otherwise open a new window
+if nvim --server "$NVIM_SOCK" --remote-expr "1" &>/dev/null; then
+  nvim --server "$NVIM_SOCK" --remote-send \
+    "<C-\\><C-n>:edit ${filepath}<CR>:call cursor(${line},${column})<CR>"
+  pane=$(tmux list-panes -a -F '#{pane_id} #{pane_current_command}' \
+    | grep -i nvim | head -1 | awk '{print $1}')
+  [ -n "$pane" ] && tmux switch-client -t "$pane"
+else
+  session=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | head -1)
+  tmux new-window -t "$session" "nvim '+call cursor(${line},${column})' '${filepath}'"
+fi
+
+open -a Ghostty
