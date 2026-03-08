@@ -56,3 +56,6 @@ keybind = cmd+digit_6=text:\x146
 keybind = cmd+digit_7=text:\x147
 keybind = cmd+digit_8=text:\x148
 keybind = cmd+digit_9=text:\x149
+
+# Cmd+l → tmux list sessions (sends Ctrl+t then s)
+keybind = cmd+l=text:\x14s

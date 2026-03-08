@@ -28,13 +28,13 @@ fi
 # Try existing nvim, otherwise open a new window
 if nvim --server "$NVIM_SOCK" --remote-expr "1" &>/dev/null; then
   nvim --server "$NVIM_SOCK" --remote-send \
-    "<C-\\><C-n>:edit ${filepath}<CR>:call cursor(${line},${column})<CR>"
+    "<C-\\><C-n>:edit ${filepath}<CR>:call cursor(${line},${column})<CR>zz"
   pane=$(tmux list-panes -a -F '#{pane_id} #{pane_current_command}' \
     | grep -i nvim | head -1 | awk '{print $1}')
   [ -n "$pane" ] && tmux switch-client -t "$pane"
 else
   session=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | head -1)
-  tmux new-window -t "$session" "nvim '+call cursor(${line},${column})' '${filepath}'"
+  tmux new-window -t "$session" "nvim '+call cursor(${line},${column})' '+normal zz' '${filepath}'"
 fi
 
 open -a Ghostty

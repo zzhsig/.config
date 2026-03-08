@@ -12,8 +12,14 @@ vim.keymap.set("i", "<C-a>", "<C-o>^", { desc = "Go to beginning of line" })
 -- Ctrl+e = end of line (insert)
 vim.keymap.set("i", "<C-e>", "<End>", { desc = "Go to end of line" })
 
+-- Ctrl+f = forward char (insert)
+vim.keymap.set("i", "<C-f>", "<Right>", { desc = "Forward char" })
+
 -- Backward delete word (Karabiner sends Option+Delete for Ctrl-W, which arrives as <M-BS>)
 vim.keymap.set("i", "<M-BS>", "<C-w>", { desc = "Backward delete word" })
 
 -- Format selected JSON with jq
 vim.keymap.set("v", "<leader>jq", "!jq .<CR>", { desc = "Format JSON" })
+
+-- Lazygit
+vim.keymap.set("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
