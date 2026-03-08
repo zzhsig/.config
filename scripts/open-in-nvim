@@ -34,7 +34,8 @@ if nvim --server "$NVIM_SOCK" --remote-expr "1" &>/dev/null; then
   [ -n "$pane" ] && tmux switch-client -t "$pane"
 else
   session=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | head -1)
-  tmux new-window -t "$session" "nvim '+call cursor(${line},${column})' '+normal zz' '${filepath}'"
+  tmux new-window -t "$session"
+  tmux send-keys "nvim '+call cursor(${line},${column})' '+normal zz' '${filepath}'" Enter
 fi
 
 open -a Ghostty
