@@ -5,6 +5,10 @@ return {
     opts = {
       -- Use a terminal split (vs floating window)
       terminal_cmd = nil, -- auto-detected
+      terminal = {
+        split_side = "right", -- "left" or "right"
+        split_width_percentage = 0.40, -- 40% of screen width (default is 0.30)
+      },
       diff_opts = {
         -- Show diffs in a vertical split
         vertical_split = true,
