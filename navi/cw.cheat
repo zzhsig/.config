@@ -1,0 +1,26 @@
+% cloudwatch, aws, cw
+
+# Tail logs with error filter
+cw tail -f /ecs/tapvid-ai-dev-us --grep "<pattern>" --grepv "START|END|REPORT"
+
+# Tail logs (all output)
+cw tail -f /ecs/tapvid-ai-dev-us --grepv "START|END|REPORT"
+
+# Tail logs with time window
+cw tail /ecs/tapvid-ai-dev-us --start <time> --grepv "START|END|REPORT"
+
+# Tail logs with grep + exclude
+cw tail -f /ecs/tapvid-ai-dev-us --grep "<pattern>" --grepv "<exclude>"
+
+# Tail and pipe through jq
+cw tail -f /ecs/tapvid-ai-dev-us --grepv "START|END|REPORT" | jq '.'
+
+# List log groups
+cw ls groups
+
+# List streams for a log group
+cw ls streams /ecs/tapvid-ai-dev-us
+
+$ pattern: echo -e "ERROR|WARN\nERROR\nWARN\nTimeout\nException"
+$ exclude: echo -e "START|END|REPORT\nHealthCheck\nOPTIONS"
+$ time: echo -e "5m\n15m\n30m\n1h\n6h\n24h"
