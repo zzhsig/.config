@@ -1,0 +1,71 @@
+{
+  "workspaceRoot": "/Users/zzh/dev",
+  "projects": {
+    "sigmatrx": {
+      "description": "SigmaTrx (CuFlow)",
+      "windowPrefix": "",
+      "dirs": {
+        "backend": "sigmatrx-backend",
+        "agent": "sigmatrx-ai-agent",
+        "frontend": "sigmatrx-ai-frontend"
+      },
+      "backend": {
+        "module": "sigmatrx-backend-start"
+      },
+      "frontend": {
+        "command": "npm run dev:daily",
+        "processPattern": "next dev"
+      },
+      "workers": [
+        {
+          "name": "Document Worker",
+          "label": "doc_wkr",
+          "script": "document_process_worker.py"
+        },
+        {
+          "name": "Project Worker",
+          "label": "proj_wkr",
+          "script": "project_action_worker.py"
+        },
+        {
+          "name": "Video Worker",
+          "label": "vid_wkr",
+          "script": "video_gen_worker.py"
+        }
+      ]
+    },
+    "tapvid": {
+      "description": "TapVid",
+      "windowPrefix": "tapvid-",
+      "dirs": {
+        "backend": "sigmatrx-backend-tapvid",
+        "agent": "tapvid-agent-service",
+        "frontend": "tapvid-frontend"
+      },
+      "backend": {
+        "module": "sigmatrx-backend-tapvid-start"
+      },
+      "frontend": {
+        "command": "pnpm install && pnpm dev:daily",
+        "processPattern": "pnpm.*dev"
+      },
+      "workers": [
+        {
+          "name": "Document Worker",
+          "label": "doc_wkr",
+          "script": "document_process_worker.py"
+        },
+        {
+          "name": "Code Gen Worker",
+          "label": "code_wkr",
+          "script": "code_gen_worker.py"
+        },
+        {
+          "name": "Action Worker",
+          "label": "action_wkr",
+          "script": "project_action_worker.py"
+        }
+      ]
+    }
+  }
+}
