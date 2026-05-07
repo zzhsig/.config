@@ -1,1 +1,4 @@
 gcloud/
+clash.meta/
+.DS_Store
+*.log
