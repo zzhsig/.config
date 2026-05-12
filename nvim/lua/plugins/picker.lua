@@ -6,6 +6,8 @@ return {
         input = {
           keys = {
             ["<Esc>"] = { "close", mode = { "n", "i" } },
+            ["<S-Up>"] = { "history_back", mode = { "i", "n" } },
+            ["<S-Down>"] = { "history_forward", mode = { "i", "n" } },
           },
         },
       },

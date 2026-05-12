@@ -1,0 +1,98 @@
+{
+    "$schema": "https://lnav.org/schemas/format-v1.schema.json",
+    "spring_boot_json_log": {
+        "title": "Spring Boot JSON Log",
+        "description": "Spring Boot logs with MDC trace/span and JSON body from ControllerLogAspect",
+        "url": "",
+        "regex": {
+            "std": {
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - trace_id=(?<trace_id>\\S*) span_id=(?<span_id>\\S*) - (?<body>.*)$"
+            },
+            "no_mdc": {
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - (?!trace_id=)(?<body>.*)$"
+            }
+        },
+        "body-field": "body",
+        "json": false,
+        "timestamp-format": [
+            "%Y-%m-%d %H:%M:%S.%L"
+        ],
+        "level-field": "level",
+        "level": {
+            "error": "ERROR",
+            "warning": "WARN",
+            "info": "INFO",
+            "debug": "DEBUG",
+            "trace": "TRACE"
+        },
+        "value": {
+            "thread": {
+                "kind": "string",
+                "identifier": true,
+                "description": "Thread name"
+            },
+            "logger": {
+                "kind": "string",
+                "identifier": true,
+                "description": "Logger class"
+            },
+            "trace_id": {
+                "kind": "string",
+                "identifier": true,
+                "description": "MDC trace ID"
+            },
+            "span_id": {
+                "kind": "string",
+                "identifier": true,
+                "description": "MDC span ID"
+            }
+        },
+        "tags": {
+            "request": {
+                "pattern": "\"type\":\"REQUEST\"",
+                "level": "info"
+            },
+            "response": {
+                "pattern": "\"type\":\"RESPONSE\"",
+                "level": "info"
+            },
+            "slow": {
+                "pattern": "\"executionTime\":\"(?:[5-9]\\d|[1-9]\\d{2,})ms\"",
+                "level": "warning",
+                "description": "Response took >= 50ms"
+            }
+        },
+        "highlights": {
+            "trace_id_val": {
+                "pattern": "trace_id=[a-f0-9]+",
+                "color": "#f5c2e7",
+                "background-color": ""
+            },
+            "request_uri": {
+                "pattern": "\"requestUri\":\"[^\"]+\"",
+                "color": "#a6e3a1",
+                "background-color": ""
+            },
+            "exec_time": {
+                "pattern": "\"executionTime\":\"[^\"]+\"",
+                "color": "#f9e2af",
+                "background-color": ""
+            },
+            "error_level": {
+                "pattern": "\\bERROR\\b",
+                "color": "#1e1e2e",
+                "background-color": "#f38ba8"
+            }
+        },
+        "sample": [
+            {
+                "line": "2026-05-12 07:29:14.504 [http-nio-8080-exec-3] INFO  a.s.b.t.aspect.ControllerLogAspect - trace_id=d0a9a372b1df484d9e68b4bddf3d3bae span_id= - {\"traceId\":\"d0a9a372b1df484d9e68b4bddf3d3bae\",\"executionTime\":\"8ms\",\"result\":\"{\\\"result\\\":null,\\\"setOrExpired\\\":false}\",\"methodName\":\"poll\",\"className\":\"ChatController\",\"requestUri\":\"/api/v1/chat/poll\",\"type\":\"RESPONSE\",\"httpMethod\":\"GET\",\"userId\":\"63602772-dc1d-43f4-8798-688f5b2fbbc8\"}",
+                "level": "info"
+            },
+            {
+                "line": "2026-05-12 07:29:16.299 [http-nio-8080-exec-2] INFO  a.s.b.t.aspect.ControllerLogAspect - trace_id=89ab4752dd1b459983e77214ca1d20a8 span_id= - {\"traceId\":\"89ab4752dd1b459983e77214ca1d20a8\",\"args\":[{\"sub\":\"63602772-dc1d-43f4-8798-688f5b2fbbc8\",\"type\":\"Jwt\",\"email\":\"jennifer.lyu@sigmatrx.ai\"},{\"method\":\"GET\",\"requestURI\":\"/api/v1/user/init\",\"type\":\"HttpServletRequest\"}],\"methodName\":\"init\",\"className\":\"UserController\",\"requestUri\":\"/api/v1/user/init\",\"type\":\"REQUEST\",\"httpMethod\":\"GET\",\"userId\":\"63602772-dc1d-43f4-8798-688f5b2fbbc8\"}",
+                "level": "info"
+            }
+        ]
+    }
+}

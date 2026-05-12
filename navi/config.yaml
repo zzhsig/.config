@@ -1,0 +1,3 @@
+finder:
+  command: fzf
+  overrides: --height 40%

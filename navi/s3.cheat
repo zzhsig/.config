@@ -1,0 +1,10 @@
+% s3, aws
+
+# Stream S3 object to stdout
+aws s3 cp <s3_url> -
+
+# Stream S3 object into nvim
+aws s3 cp <s3_url> - | nvim -
+
+$ expires: echo -e "3600\n900\n86400"
+$ bytes: echo -e "1024\n4096\n65536"
