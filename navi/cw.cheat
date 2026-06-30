@@ -22,6 +22,9 @@ cw tail -f <log> --region <region> --grep "ERROR" | lnav
 # Tail live to terminal (raw, for piping to jq/grep)
 cw tail -f <log> --region <region>
 
+# Tail a whole group's streams live, labelled by stream name
+cw tail -f <group> --region <region> -s
+
 # History to terminal (raw)
 cw tail <log> --region <region> -b <time>
 
@@ -91,7 +94,7 @@ cw tail <log> --region <region> -b <time> -g '"<endpoint>"' | lnav
 # Track user activity in backend
 cw tail <log> --region <region> -b <time> -g '"<user_uuid>"' | lnav
 
-$ log: printf '%s\n' "/ec2/tapvid-agent-service:agent" "/ec2/tapvid-agent-service:backend" "/ec2/tapvid-agent-service:project_worker" "/ec2/tapvid-agent-service:project_action_worker" "/ec2/tapvid-agent-service:document_worker" "/ec2/tapvid-agent-service:video_gen_worker" "/ec2/tapvid-agent-service:code_gen_worker" "/ecs/tapvid-ai-dev-us" "/ecs/tapvid-backend-dev-us"
+$ log: printf '%s\n' "/ec2/tapvid-agent-service" "/ec2/tapvid-agent-service:agent" "/ec2/tapvid-agent-service:backend" "/ec2/tapvid-agent-service:project_worker" "/ec2/tapvid-agent-service:project_action_worker" "/ec2/tapvid-agent-service:document_worker" "/ec2/tapvid-agent-service:video_gen_worker" "/ec2/tapvid-agent-service:code_gen_worker" "/ecs/tapvid-ai-dev-us" "/ecs/tapvid-backend-dev-us"
 $ group: printf '%s\n' "/ec2/tapvid-agent-service" "/ecs/tapvid-ai-dev-us" "/ecs/tapvid-backend-dev-us"
 $ region: echo -e "us-east-1\nus-west-2"
 $ pattern: echo -e "ERROR\nWARN\nTimeout\nException"
