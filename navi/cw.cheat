@@ -1,95 +1,99 @@
-% cloudwatch, aws, cw
+% cloudwatch, cw, logs, lnav, tapvid
 
-# [agent] Tail logs with error filter
-cw tail -f /ecs/tapvid-ai-dev-us --grep "<pattern>" | grep -Ev "START|END|REPORT"
+# All TapVid app logs now live in CloudWatch — EC2 test box logs ship to
+# /ec2/tapvid-agent-service (one stream per process), ECS dev to /ecs/*-dev-us.
+# Pick a <log> source and pipe through lnav for structured, navigable viewing
+# (backend -> spring_boot_json_log, agent/workers -> tapvid_agent_log).
 
-# [agent] Tail logs (all output)
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT"
+## Generic tail (any source)
 
-# [agent] Tail logs with time window
-cw tail /ecs/tapvid-ai-dev-us --start <time> | grep -Ev "START|END|REPORT"
+# Tail live in lnav
+cw tail -f <log> --region <region> | lnav
 
-# [agent] Tail logs with grep + exclude
-cw tail -f /ecs/tapvid-ai-dev-us --grep "<pattern>" | grep -Ev "<exclude>"
+# Tail live with grep filter, in lnav
+cw tail -f <log> --region <region> --grep "<pattern>" | lnav
 
-# [agent] Tail and pipe through jq
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | jq '.'
+# Recent history (time window) in lnav
+cw tail <log> --region <region> -b <time> | lnav
 
-# List streams for a log group
-cw ls streams /ecs/tapvid-ai-dev-us
+# Errors only, in lnav
+cw tail -f <log> --region <region> --grep "ERROR" | lnav
 
-# [agent] Tail errors only
-cw tail -f /ecs/tapvid-ai-dev-us --grep "ERROR" | grep -Ev "START|END|REPORT"
+# Tail live to terminal (raw, for piping to jq/grep)
+cw tail -f <log> --region <region>
 
-# [agent] Track a project by ID
-cw tail -f /ecs/tapvid-ai-dev-us --grep "<project_id>" | grep -Ev "START|END|REPORT"
+# History to terminal (raw)
+cw tail <log> --region <region> -b <time>
 
-# [agent] Track a project (recent history)
-cw tail /ecs/tapvid-ai-dev-us --start <time> --grep "<project_id>" | grep -Ev "START|END|REPORT"
+# List streams in a log group
+cw ls streams <group> --region <region>
 
-# [agent] Provider router issues (no slot / Redis failures)
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -E "no slot available|Redis unhealthy|Redis error"
+## Project lifecycle tracing (agent log)
 
-# [agent] LLM pool fallback events
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -E "Falling back to OpenRouter|OpenRouter returned an error"
+# Track a project by ID (live, in lnav)
+cw tail -f <log> --region <region> --grep "<project_id>" | lnav
 
-# [agent] Scene coding progress (live)
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -E "\[coding\]|\[orchestrator\]|\[video_handler\]"
+# Track a project by ID (recent history, in lnav)
+cw tail <log> --region <region> -b <time> --grep "<project_id>" | lnav
 
-# [agent] Scene failures / recursion limits
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT|HealthCheck" | grep -E "failed|raised unexpectedly|Recursion limit"
+# Pipeline trace: full lifecycle for a project (history, in lnav)
+cw tail <log> --region <region> -b <time> --grep "<project_id>" | grep -E "outline generation|Resolving scene plan|Prepared.*scene jobs|Running.*scenes|No checkpoint|starting fresh|Resuming interrupted|completed in|failed|raised unexpectedly|Recursion limit|Abandoned|E2E video generation|save_video_gen|Recovery|obfuscate|tts|TTS|blank screen|ERROR" | lnav
 
-# [agent] Abandoned / cancelled tasks
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -Ei "abandoned|cancelled"
+# Pipeline trace: failures only for a project (history)
+cw tail <log> --region <region> -b <time> --grep "<project_id>" | grep -E "ERROR|failed|raised unexpectedly|Recursion limit|Abandoned|blank screen|Recovery failed"
 
-# [agent] Worker health (heartbeat / retries / shutdown)
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -Ei "Worker|heartbeat|Max retries|graceful shutdown"
+## Agent error categories (live)
 
-# [agent] TTS / audio errors
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -Ei "tts|elevenlabs|cosyvoice|audio"
+# Provider router issues (no slot / Redis failures)
+cw tail -f <log> --region <region> | grep -E "no slot available|Redis unhealthy|Redis error"
 
-# [agent] Auth rejections
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -E "Rejected request|invalid or missing X-Api-Key"
+# LLM pool fallback events
+cw tail -f <log> --region <region> | grep -E "Falling back to OpenRouter|OpenRouter returned an error"
 
-# [agent] Blank screen detections
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -E "blank screen|BlankScreenValidator"
+# Scene coding progress
+cw tail -f <log> --region <region> | grep -E "\[coding\]|\[orchestrator\]|\[video_handler\]"
 
-# [agent] S3 integrity / upload issues
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -E "S3 integrity|upload failed|obfuscate_and_upload"
+# Scene failures / recursion limits
+cw tail -f <log> --region <region> | grep -E "failed|raised unexpectedly|Recursion limit"
 
-# [agent] Checkpoint / database errors
-cw tail -f /ecs/tapvid-ai-dev-us | grep -Ev "START|END|REPORT" | grep -Ei "checkpoint"
+# Abandoned / cancelled tasks
+cw tail -f <log> --region <region> | grep -Ei "abandoned|cancelled"
 
-# [agent] Pipeline trace: full lifecycle for a project (historical)
-cw tail /ecs/tapvid-ai-dev-us --start <time> --grep "<project_id>" | grep -Ev "START|END|REPORT" | grep -E "outline generation|Resolving scene plan|Prepared.*scene jobs|Running.*scenes|No checkpoint|starting fresh|Resuming interrupted|completed in|failed|raised unexpectedly|Recursion limit|Abandoned|E2E video generation|save_video_gen|Recovery|obfuscate|tts|TTS|blank screen|ERROR"
+# Worker health (heartbeat / retries / shutdown)
+cw tail -f <log> --region <region> | grep -Ei "Worker|heartbeat|Max retries|graceful shutdown"
 
-# [agent] Pipeline trace: full lifecycle for a project (live)
-cw tail -f /ecs/tapvid-ai-dev-us --grep "<project_id>" | grep -Ev "START|END|REPORT" | grep -E "outline generation|Resolving scene plan|Prepared.*scene jobs|Running.*scenes|No checkpoint|starting fresh|Resuming interrupted|completed in|failed|raised unexpectedly|Recursion limit|Abandoned|E2E video generation|save_video_gen|Recovery|obfuscate|tts|TTS|blank screen|ERROR"
+# TTS / audio errors
+cw tail -f <log> --region <region> | grep -Ei "tts|elevenlabs|cosyvoice|audio"
 
-# [agent] Pipeline trace: show only failures for a project
-cw tail /ecs/tapvid-ai-dev-us --start <time> --grep "<project_id>" | grep -Ev "START|END|REPORT" | grep -E "ERROR|failed|raised unexpectedly|Recursion limit|Abandoned|blank screen|Recovery failed"
+# Blank screen detections
+cw tail -f <log> --region <region> | grep -E "blank screen|BlankScreenValidator"
 
-## Backend service (tapvid-backend-dev-us)
+# S3 integrity / upload issues
+cw tail -f <log> --region <region> | grep -E "S3 integrity|upload failed|obfuscate_and_upload"
 
-# [backend] Search logs by keyword
-cw tail -b <time> -g '"<keyword>"' /ecs/tapvid-backend-dev-us
+# Auth rejections
+cw tail -f <log> --region <region> | grep -E "Rejected request|invalid or missing X-Api-Key"
 
-# [backend] Search logs by multiple keywords (AND)
-cw tail -b <time> -g '"<keyword1>" "<keyword2>"' /ecs/tapvid-backend-dev-us
+## Backend (Spring Boot) search
 
-# [backend] Search errors by user UUID
-cw tail -b <time> -g '"<user_uuid>" "ERROR"' /ecs/tapvid-backend-dev-us
+# Search backend logs by keyword (in lnav)
+cw tail <log> --region <region> -b <time> -g '"<keyword>"' | lnav
 
-# [backend] Search logs by API endpoint
-cw tail -b <time> -g '"<endpoint>"' /ecs/tapvid-backend-dev-us
+# Search backend logs by two keywords (AND)
+cw tail <log> --region <region> -b <time> -g '"<keyword1>" "<keyword2>"' | lnav
 
-# [backend] Tail logs (live follow)
-cw tail -f -t /ecs/tapvid-backend-dev-us
+# Search backend errors by user UUID
+cw tail <log> --region <region> -b <time> -g '"<user_uuid>" "ERROR"' | lnav
 
-# [backend] Track user activity
-cw tail -b <time> -g '"<user_uuid>"' /ecs/tapvid-backend-dev-us
+# Search backend logs by API endpoint
+cw tail <log> --region <region> -b <time> -g '"<endpoint>"' | lnav
 
+# Track user activity in backend
+cw tail <log> --region <region> -b <time> -g '"<user_uuid>"' | lnav
+
+$ log: printf '%s\n' "/ec2/tapvid-agent-service:agent" "/ec2/tapvid-agent-service:backend" "/ec2/tapvid-agent-service:project_worker" "/ec2/tapvid-agent-service:project_action_worker" "/ec2/tapvid-agent-service:document_worker" "/ec2/tapvid-agent-service:video_gen_worker" "/ec2/tapvid-agent-service:code_gen_worker" "/ecs/tapvid-ai-dev-us" "/ecs/tapvid-backend-dev-us"
+$ group: printf '%s\n' "/ec2/tapvid-agent-service" "/ecs/tapvid-ai-dev-us" "/ecs/tapvid-backend-dev-us"
+$ region: echo -e "us-east-1\nus-west-2"
 $ pattern: echo -e "ERROR\nWARN\nTimeout\nException"
-$ exclude: echo -e "START|END|REPORT\nHealthCheck\nOPTIONS"
 $ time: echo -e "5m\n15m\n30m\n1h\n6h\n24h"
 $ endpoint: printf "/api/v1/project/create\n/api/v1/user/init\n/api/v1/user/profile\n"

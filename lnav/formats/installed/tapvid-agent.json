@@ -9,9 +9,6 @@
             },
             "full": {
                 "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}:\\d{2},\\d{3})\\s+(?<level>\\w+)\\s+\\[(?<trace_id>[a-f0-9]+)\\]\\s+(?<module>[^\\s]+)\\s+(?<body>.*)"
-            },
-            "uvicorn": {
-                "pattern": "^(?<level>INFO):\\s+(?<body>\\d+\\.\\d+\\.\\d+\\.\\d+:\\d+\\s+-\\s+\"(?<method>\\w+)\\s+(?<path>[^\"]+)\\s+HTTP/[^\"]+\"\\s+(?<status>\\d+).*)"
             }
         },
         "timestamp-format": [

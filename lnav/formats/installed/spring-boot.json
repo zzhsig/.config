@@ -6,7 +6,7 @@
         "url": "",
         "regex": {
             "std": {
-                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - trace_id=(?<trace_id>\\S*) span_id=(?<span_id>\\S*) - (?<body>.*)$"
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - trace_id=(?<trace_id>\\S*) span_id=(?<span_id>\\S*) - (?<body>\\{\"traceId\":\"[^\"]*\"(?:,\"executionTime\":\"(?<exec_time>[^\"]*)\")?(?:,\"args\":(?<args>.*)|,\"result\":(?<result>.*))?,\"methodName\":\"(?<method_name>[^\"]*)\",\"className\":\"(?<class_name>[^\"]*)\",\"requestUri\":\"(?<request_uri>[^\"]*)\",\"type\":\"(?<req_type>[^\"]*)\"(?:,\"httpMethod\":\"(?<http_method>[^\"]*)\")?,\"userId\":(?:\"(?<user_id>[^\"]*)\"|null)\\}|.*)$"
             },
             "no_mdc": {
                 "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - (?!trace_id=)(?<body>.*)$"
@@ -45,6 +45,48 @@
                 "kind": "string",
                 "identifier": true,
                 "description": "MDC span ID"
+            },
+            "class_name": {
+                "kind": "string",
+                "identifier": true,
+                "description": "Controller class name"
+            },
+            "method_name": {
+                "kind": "string",
+                "identifier": true,
+                "description": "Controller method name"
+            },
+            "request_uri": {
+                "kind": "string",
+                "identifier": true,
+                "description": "Request URI"
+            },
+            "http_method": {
+                "kind": "string",
+                "identifier": true,
+                "description": "HTTP method"
+            },
+            "req_type": {
+                "kind": "string",
+                "identifier": true,
+                "description": "Log entry type (REQUEST/RESPONSE)"
+            },
+            "user_id": {
+                "kind": "string",
+                "identifier": true,
+                "description": "Authenticated user ID"
+            },
+            "exec_time": {
+                "kind": "string",
+                "description": "Execution time of the request"
+            },
+            "args": {
+                "kind": "json",
+                "description": "Method arguments (REQUEST entries)"
+            },
+            "result": {
+                "kind": "string",
+                "description": "Method result (RESPONSE entries)"
             }
         },
         "tags": {
@@ -91,6 +133,18 @@
             },
             {
                 "line": "2026-05-12 07:29:16.299 [http-nio-8080-exec-2] INFO  a.s.b.t.aspect.ControllerLogAspect - trace_id=89ab4752dd1b459983e77214ca1d20a8 span_id= - {\"traceId\":\"89ab4752dd1b459983e77214ca1d20a8\",\"args\":[{\"sub\":\"63602772-dc1d-43f4-8798-688f5b2fbbc8\",\"type\":\"Jwt\",\"email\":\"jennifer.lyu@sigmatrx.ai\"},{\"method\":\"GET\",\"requestURI\":\"/api/v1/user/init\",\"type\":\"HttpServletRequest\"}],\"methodName\":\"init\",\"className\":\"UserController\",\"requestUri\":\"/api/v1/user/init\",\"type\":\"REQUEST\",\"httpMethod\":\"GET\",\"userId\":\"63602772-dc1d-43f4-8798-688f5b2fbbc8\"}",
+                "level": "info"
+            },
+            {
+                "line": "2026-06-30 09:25:54.034 [http-nio-8080-exec-4] INFO  a.s.backend.tapvid.util.LoggerUtil - trace_id=e5f3e490e2f6414491c536f12a1585fb span_id= - {\"traceId\":\"e5f3e490e2f6414491c536f12a1585fb\",\"args\":[\"1126\",\"18359\",\"30\",\"\",{\"id\":10000299,\"uuid\":\"53497dc7-0961-40ec-9eb0-161f8b4f56b6\",\"createTime\":\"2026-06-29T10:23:45\",\"modifyTime\":\"2026-06-29T10:23:52\",\"username\":\"l.is.sermansp.es.s.ardk710.5.4\",\"email\":\"l.is.sermansp.es.s.ardk710.5.4@gmail.com\",\"questionnaire\":{\"role\":\"agency\",\"intent\":\"explainer\",\"frequency\":\"weekly\",\"workflow\":\"basicTools\",\"source\":\"tiktok\"}},\"\"],\"methodName\":\"poll\",\"className\":\"ChatController\",\"requestUri\":\"/api/v1/chat/poll\",\"type\":\"REQUEST\",\"httpMethod\":\"GET\",\"userId\":\"53497dc7-0961-40ec-9eb0-161f8b4f56b6\"}",
+                "level": "info"
+            },
+            {
+                "line": "2026-06-30 06:39:57.748 [http-nio-8080-exec-4] INFO  a.s.backend.tapvid.util.LoggerUtil - trace_id=fa4b88991d084b49b417e85d302e048d span_id= - {\"traceId\":\"fa4b88991d084b49b417e85d302e048d\",\"executionTime\":\"172ms\",\"result\":\"{\\\"success\\\":true,\\\"code\\\":200,\\\"data\\\":true}\",\"methodName\":\"init\",\"className\":\"UserController\",\"requestUri\":\"/api/v1/user/init\",\"type\":\"RESPONSE\",\"httpMethod\":\"GET\",\"userId\":\"3e62c4a5-1e4a-4f34-ae6d-6827c125bbd9\"}",
+                "level": "info"
+            },
+            {
+                "line": "2026-06-30 10:39:39.193 [http-nio-8080-exec-8] INFO  a.s.backend.tapvid.util.LoggerUtil - trace_id=4f529e322f3140d3841defbe2027ac35 span_id= - {\"traceId\":\"4f529e322f3140d3841defbe2027ac35\",\"args\":[\"10194\",\"\\\"d2f3b9c5\\\"\",null],\"methodName\":\"getFileById\",\"className\":\"VideoDocumentController\",\"requestUri\":\"/api/v1/videoGen/file\",\"type\":\"REQUEST\",\"httpMethod\":\"GET\",\"userId\":null}",
                 "level": "info"
             }
         ]
