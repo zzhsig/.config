@@ -1,10 +1,21 @@
 % s3, aws
 
+# cd into a mounted bucket / project
+cd ~/mnt/s3/<bucket>/<project>
+
 # Stream S3 object to stdout
 aws s3 cp <s3_url> -
 
 # Stream S3 object into nvim
 aws s3 cp <s3_url> - | nvim -
 
+# Refresh rclone VFS cache for a mounted workspace (pick up new remote files)
+rclone rc --rc-addr 127.0.0.1:<rc_port> vfs/refresh recursive=true _async=true
+
+# Refresh rclone VFS cache for ALL mounted workspaces
+for p in 5572 5573; do rclone rc --rc-addr 127.0.0.1:$p vfs/refresh recursive=true _async=true; done
+
+$ bucket: ls -1 ~/mnt/s3
+$ rc_port: echo -e "tapvid-agent 5572\ntapvid-agent-prod 5573" --- --column 2 --delimiter '\s+'
 $ expires: echo -e "3600\n900\n86400"
 $ bytes: echo -e "1024\n4096\n65536"
