@@ -4,10 +4,10 @@
 aws ssm start-session --region us-east-1 --target i-038e1f3080413685b --document-name AWS-StartInteractiveCommand --parameters command="sudo tail -n 50 -F <log>" 2>/dev/null | grep --line-buffered -vE '^(Starting session|Cannot perform start session|SessionId:)' | lnav
 
 # Tail EC2 log live in lnav (grep filter)
-aws ssm start-session --region us-east-1 --target i-038e1f3080413685b --document-name AWS-StartInteractiveCommand --parameters command="sudo tail -n 50 -F <log> | grep --line-buffered -E '<pattern>'" 2>/dev/null | grep --line-buffered -vE '^(Starting session|Cannot perform start session|SessionId:)' | lnav
+aws ssm start-session --region us-east-1 --target i-038e1f3080413685b --document-name AWS-StartInteractiveCommand --parameters '{"command":["sudo tail -n 50 -F <log> | grep --line-buffered -E \"<pattern>\""]}' 2>/dev/null | grep --line-buffered -vE '^(Starting session|Cannot perform start session|SessionId:)' | lnav
 
 # Tail EC2 errors only, in lnav
-aws ssm start-session --region us-east-1 --target i-038e1f3080413685b --document-name AWS-StartInteractiveCommand --parameters command="sudo tail -n 50 -F <log> | grep --line-buffered -E 'ERROR|CRITICAL'" 2>/dev/null | grep --line-buffered -vE '^(Starting session|Cannot perform start session|SessionId:)' | lnav
+aws ssm start-session --region us-east-1 --target i-038e1f3080413685b --document-name AWS-StartInteractiveCommand --parameters '{"command":["sudo tail -n 50 -F <log> | grep --line-buffered -E \"ERROR|CRITICAL\""]}' 2>/dev/null | grep --line-buffered -vE '^(Starting session|Cannot perform start session|SessionId:)' | lnav
 
 # Tail EC2 log live to terminal (no lnav)
 aws ssm start-session --region us-east-1 --target i-038e1f3080413685b --document-name AWS-StartInteractiveCommand --parameters command="sudo tail -n 50 -F <log>" 2>/dev/null | grep --line-buffered -vE '^(Starting session|Cannot perform start session|SessionId:)'

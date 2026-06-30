@@ -6,8 +6,11 @@ aws ssm start-session --target <bastion> --document-name AWS-StartPortForwarding
 # Port-forward to Redis (6379)
 aws ssm start-session --target <bastion> --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="<redis_host>",portNumber="6379",localPortNumber="<redis_local_port>" --region <region>
 
-# SSH to EC2 via Instance Connect (lands in backend dir)
-aws ec2-instance-connect ssh --instance-id <ec2_instance> --command "cd /home/ec2-user/tapvid/sigmatrx-backend-tapvid && exec bash -l"
+# SSH to EC2 via Instance Connect (lands in home)
+aws ec2-instance-connect ssh --instance-id <ec2_instance>
+
+# Shell on EC2 via SSM as ec2-user, lands in backend dir
+aws ssm start-session --region <region> --target <ec2_instance> --document-name AWS-StartInteractiveCommand --parameters '{"command":["sudo -u ec2-user -i bash -c \"cd /home/ec2-user/tapvid/sigmatrx-backend-tapvid && exec bash -l\""]}'
 
 # Connect to redis-cli (after tunnel is up)
 redis-cli -h localhost -p <redis_local_port>
