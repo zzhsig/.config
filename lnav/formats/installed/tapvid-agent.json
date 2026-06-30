@@ -1,0 +1,50 @@
+{
+    "$schema": "https://lnav.org/schemas/format-v1.schema.json",
+    "tapvid_agent_log": {
+        "title": "TapVid Agent Service Log",
+        "description": "Log format for tapvid-agent-service Python logging",
+        "regex": {
+            "short": {
+                "pattern": "^(?<timestamp>\\d{2}:\\d{2}:\\d{2})\\s+(?<level>\\w+)\\s+\\[(?<trace_id>[a-f0-9]+)\\]\\s+(?<module>[^\\s]+)\\s+-\\s+(?<body>.*)"
+            },
+            "full": {
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}:\\d{2},\\d{3})\\s+(?<level>\\w+)\\s+\\[(?<trace_id>[a-f0-9]+)\\]\\s+(?<module>[^\\s]+)\\s+(?<body>.*)"
+            },
+            "uvicorn": {
+                "pattern": "^(?<level>INFO):\\s+(?<body>\\d+\\.\\d+\\.\\d+\\.\\d+:\\d+\\s+-\\s+\"(?<method>\\w+)\\s+(?<path>[^\"]+)\\s+HTTP/[^\"]+\"\\s+(?<status>\\d+).*)"
+            }
+        },
+        "timestamp-format": [
+            "%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S,%L"
+        ],
+        "level-field": "level",
+        "level": {
+            "error": "ERROR",
+            "warning": "WARNING",
+            "info": "INFO",
+            "debug": "DEBUG"
+        },
+        "opid-field": "trace_id",
+        "value": {
+            "trace_id": {
+                "kind": "string",
+                "identifier": true
+            },
+            "module": {
+                "kind": "string",
+                "identifier": true
+            }
+        },
+        "sample": [
+            {
+                "line": "06:55:17 INFO     [6a02ced5bab6577a0b31269c4d202618] src/api/routes/title.py - Title create request, project_id=252, content_length=2004",
+                "level": "info"
+            },
+            {
+                "line": "2026-05-12 04:28:20,750 INFO [d6529a42521f9188e88bb5624f7b28f4] src.agent.orchestrator.video_handler [video_handler] Starting coding task chapter=4 scene=2 turn=1322 agent_id=247:1322:c4-s2",
+                "level": "info"
+            }
+        ]
+    }
+}
