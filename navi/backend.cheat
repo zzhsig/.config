@@ -1,0 +1,4 @@
+% backend, java, maven
+
+# Start backend locally
+mvn spring-boot:run -pl sigmatrx-backend-tapvid-start

@@ -1,0 +1,6 @@
+% port, kill, network
+
+# Kill process on a port
+kill -9 $(lsof -ti:<port>)
+
+$ port: echo -e "3000\n8080\n5173\n4200\n8000" --- --query 3000

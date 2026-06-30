@@ -1,0 +1,21 @@
+% ssm, aws, tunnel
+
+# Port-forward to RDS (MySQL 3306)
+aws ssm start-session --target <bastion> --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="<rds_host>",portNumber="3306",localPortNumber="<local_port>" --region <region>
+
+# Port-forward to Redis (6379)
+aws ssm start-session --target <bastion> --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="<redis_host>",portNumber="6379",localPortNumber="<redis_local_port>" --region <region>
+
+# SSH to EC2 via Instance Connect (lands in backend dir)
+aws ec2-instance-connect ssh --instance-id <ec2_instance> --command "cd /home/ec2-user/tapvid/sigmatrx-backend-tapvid && exec bash -l"
+
+# Connect to redis-cli (after tunnel is up)
+redis-cli -h localhost -p <redis_local_port>
+
+$ ec2_instance: echo "i-038e1f3080413685b"
+$ bastion: echo "i-015e4c6bc3a63e528"
+$ rds_host: echo "dev-sigmatri-ai-rdb-us-east-1.cluster-cwh8iuik4c8o.us-east-1.rds.amazonaws.com"
+$ redis_host: echo "sigmatrx-test-redis-us-east-1.uyxqm9.0001.use1.cache.amazonaws.com"
+$ local_port: echo -e "3306\n3307"
+$ redis_local_port: echo -e "6379\n6380"
+$ region: echo -e "us-east-1\nus-west-2"
