@@ -21,6 +21,22 @@ return {
         explorer = {
           hidden = true,
           ignored = true,
+          -- Append a right-side, human-readable file size to each file row.
+          format = function(item, picker)
+            local ret = Snacks.picker.format.file(item, picker)
+            if not item.dir then
+              local stat = vim.uv.fs_stat(item.file)
+              if stat then
+                local size, units, u = stat.size, { "B", "K", "M", "G", "T" }, 1
+                while size >= 1024 and u < #units do
+                  size, u = size / 1024, u + 1
+                end
+                local str = u == 1 and ("%d%s"):format(size, units[u]) or ("%.1f%s"):format(size, units[u])
+                ret[#ret + 1] = { " " .. str, "SnacksPickerDir" }
+              end
+            end
+            return ret
+          end,
           actions = {
             explorer_expand_all = function(picker)
               local tree = require("snacks.explorer.tree")
