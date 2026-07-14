@@ -66,6 +66,17 @@
           "script": "project_action_worker.py"
         }
       ]
+    },
+    "tapvid-single-html": {
+      "description": "TapVid single-HTML video experiments (offline lab)",
+      "windowPrefix": "shtml-",
+      "dirs": {
+        "repo": "tapvid-single-html-experiments"
+      },
+      "assets": {
+        "test": "~/mnt/s3/tapvid-agent",
+        "prod": "~/mnt/s3/tapvid-agent-prod"
+      }
     }
   }
 }

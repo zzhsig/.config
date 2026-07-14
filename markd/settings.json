@@ -1,0 +1,13 @@
+{
+  "theme": "light",
+  "accent": "#111827",
+  "contentWidth": "standard",
+  "textScale": 1.05,
+  "readingFont": "sans",
+  "showShortcutHints": true,
+  "terminalApp": "Ghostty",
+  "indexedFolders": [
+    ".claude",
+    ".idea"
+  ]
+}

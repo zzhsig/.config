@@ -6,7 +6,7 @@
         "url": "",
         "regex": {
             "std": {
-                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - trace_id=(?<trace_id>\\S*) span_id=(?<span_id>\\S*) - (?<body>\\{\"traceId\":\"[^\"]*\"(?:,\"executionTime\":\"(?<exec_time>[^\"]*)\")?(?:,\"args\":(?<args>.*)|,\"result\":(?<result>.*))?,\"methodName\":\"(?<method_name>[^\"]*)\",\"className\":\"(?<class_name>[^\"]*)\",\"requestUri\":\"(?<request_uri>[^\"]*)\",\"type\":\"(?<req_type>[^\"]*)\"(?:,\"httpMethod\":\"(?<http_method>[^\"]*)\")?,\"userId\":(?:\"(?<user_id>[^\"]*)\"|null)\\}|.*)$"
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - trace_id=(?<trace_id>\\S*) span_id=(?<span_id>\\S*) (?:project_id=(?<project_id>\\S*) )?- (?<body>\\{\"traceId\":\"[^\"]*\"(?:,\"executionTime\":\"(?<exec_time>[^\"]*)\")?(?:,\"args\":(?<args>.*)|,\"result\":(?<result>.*))?,\"methodName\":\"(?<method_name>[^\"]*)\",\"className\":\"(?<class_name>[^\"]*)\",\"requestUri\":\"(?<request_uri>[^\"]*)\",\"type\":\"(?<req_type>[^\"]*)\"(?:,\"httpMethod\":\"(?<http_method>[^\"]*)\")?,\"userId\":(?:\"(?<user_id>[^\"]*)\"|null)\\}|.*)$"
             },
             "no_mdc": {
                 "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?<thread>[^\\]]+)\\] (?<level>\\w+)\\s+(?<logger>\\S+) - (?!trace_id=)(?<body>.*)$"
@@ -45,6 +45,11 @@
                 "kind": "string",
                 "identifier": true,
                 "description": "MDC span ID"
+            },
+            "project_id": {
+                "kind": "string",
+                "identifier": true,
+                "description": "MDC project ID (canonical numeric cross-service key)"
             },
             "class_name": {
                 "kind": "string",
@@ -110,6 +115,11 @@
                 "color": "#f5c2e7",
                 "background-color": ""
             },
+            "project_id_val": {
+                "pattern": "project_id=\\d+",
+                "color": "#89b4fa",
+                "background-color": ""
+            },
             "request_uri": {
                 "pattern": "\"requestUri\":\"[^\"]+\"",
                 "color": "#a6e3a1",
@@ -145,6 +155,10 @@
             },
             {
                 "line": "2026-06-30 10:39:39.193 [http-nio-8080-exec-8] INFO  a.s.backend.tapvid.util.LoggerUtil - trace_id=4f529e322f3140d3841defbe2027ac35 span_id= - {\"traceId\":\"4f529e322f3140d3841defbe2027ac35\",\"args\":[\"10194\",\"\\\"d2f3b9c5\\\"\",null],\"methodName\":\"getFileById\",\"className\":\"VideoDocumentController\",\"requestUri\":\"/api/v1/videoGen/file\",\"type\":\"REQUEST\",\"httpMethod\":\"GET\",\"userId\":null}",
+                "level": "info"
+            },
+            {
+                "line": "2026-07-01 08:09:19.618 [http-nio-8080-exec-6] INFO  a.s.backend.tapvid.util.LoggerUtil - trace_id=3c3a32c588a84733a525bda790728fdb span_id= project_id=1145 - {\"traceId\":\"3c3a32c588a84733a525bda790728fdb\",\"executionTime\":\"9ms\",\"result\":\"{\\\"result\\\":null,\\\"setOrExpired\\\":false}\",\"methodName\":\"getScript\",\"className\":\"ChatContentController\",\"requestUri\":\"/api/v1/chat/content/getScript\",\"type\":\"RESPONSE\",\"httpMethod\":\"GET\",\"userId\":\"411800eb-2a09-4caa-bb12-ce9f86f7f70f\"}",
                 "level": "info"
             }
         ]

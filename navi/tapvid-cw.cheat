@@ -1,0 +1,20 @@
+% tapvid, cloudwatch, logs
+
+# NOTE: logs are UTC. This Mac is PDT, and `cw -t` prints event times in Mac-local TZ by
+# default (looks 7h behind the UTC log bodies). `TZ=UTC` below makes -t match the bodies.
+
+# Filter a log group by project id (last N days)
+TZ=UTC cw tail <group> -b <days>d -t --region us-east-1 | grep -iE 'project_id=<project_id>' | lnav
+
+# Filter a log group by any keyword regex (last N days)
+TZ=UTC cw tail <group> -b <days>d -t --region us-east-1 | grep -iE '<keyword>' | lnav
+
+# Live tail a log group (follow; seeds the last <window> so a quiet box isn't blank)
+TZ=UTC cw tail <group> -f -t -b <window> --region us-east-1 | lnav
+
+# Live tail a log group filtered by keyword regex (follow)
+TZ=UTC cw tail <group> -f -t -b <window> --region us-east-1 | grep --line-buffered -iE '<keyword>' | lnav
+
+$ group: printf '%s\n' "/ec2/tapvid-agent-service" "/ecs/admin-backend-dev-us" "/ecs/admin-backend-prod-us" "/ecs/tapvid-agent-service-dev" "/ecs/tapvid-ai-beta-us" "/ecs/tapvid-ai-dev-us" "/ecs/tapvid-ai-prod-us" "/ecs/tapvid-backend-beta-us" "/ecs/tapvid-backend-dev-us" "/ecs/tapvid-backend-prod-us"
+$ days: echo -e "1\n3\n7\n14"
+$ window: printf '%s\n' "15m" "1h" "6h" "12h" "1d"
