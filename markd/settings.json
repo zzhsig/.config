@@ -1,6 +1,6 @@
 {
   "theme": "light",
-  "accent": "#111827",
+  "accent": "#0f766e",
   "contentWidth": "standard",
   "textScale": 1.05,
   "readingFont": "sans",
@@ -8,6 +8,7 @@
   "terminalApp": "Ghostty",
   "indexedFolders": [
     ".claude",
-    ".idea"
+    ".idea",
+    "results"
   ]
 }
