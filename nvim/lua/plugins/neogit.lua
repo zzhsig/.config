@@ -1,5 +1,14 @@
 return {
   {
+    -- these snacks picker keys shadow the Neogit bindings below
+    "folke/snacks.nvim",
+    keys = {
+      { "<leader>gs", false },
+      { "<leader>gp", false },
+      { "<leader>gP", false },
+    },
+  },
+  {
     "NeogitOrg/neogit",
     cmd = "Neogit",
     dependencies = {
