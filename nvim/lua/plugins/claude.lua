@@ -28,6 +28,39 @@ return {
         pattern = "*claude*",
         callback = function()
           vim.keymap.set("t", "<C-q>", "<C-\\><C-n><cmd>ClaudeCode<cr>", { buffer = true, desc = "Close Claude panel" })
+
+          -- Open the file under the cursor in the OTHER window, never in the Claude split.
+          -- Real paths (e.g. lua/foo.lua:42) open directly and jump to the line.
+          -- Bare basenames (e.g. modes.py, which Claude writes in prose) fall back to
+          -- the snacks file picker, seeded with the name so you just hit <cr>.
+          local function open_in_other_win()
+            local file = vim.fn.expand("<cfile>")
+            if file == "" then
+              return
+            end
+            local line = vim.fn.expand("<cWORD>"):match(":(%d+)")
+            vim.cmd("wincmd p") -- back to the code window (Claude split lives on the right)
+            if vim.bo.buftype == "terminal" then
+              vim.cmd("wincmd h") -- fallback: no code window to return to, step left
+            end
+
+            if vim.fn.filereadable(vim.fn.fnamemodify(file, ":p")) == 1 then
+              vim.cmd("edit " .. vim.fn.fnameescape(file))
+              if line then
+                vim.cmd(tostring(line))
+              end
+            else
+              -- Not a resolvable path — fuzzy-find by basename in the code window.
+              require("snacks").picker.files({ pattern = vim.fn.fnamemodify(file, ":t") })
+            end
+          end
+          vim.keymap.set(
+            "n",
+            "gf",
+            open_in_other_win,
+            { buffer = true, desc = "Open file under cursor in other window" }
+          )
+          vim.keymap.set("n", "gF", open_in_other_win, { buffer = true, desc = "Open file+line in other window" })
         end,
       })
     end,
