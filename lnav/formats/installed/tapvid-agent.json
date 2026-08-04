@@ -26,11 +26,13 @@
         "value": {
             "trace_id": {
                 "kind": "string",
-                "identifier": true
+                "identifier": true,
+                "hidden": true
             },
             "project_id": {
                 "kind": "string",
-                "identifier": true
+                "identifier": true,
+                "hidden": true
             },
             "module": {
                 "kind": "string",
