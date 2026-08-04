@@ -1,0 +1,7 @@
+% tapvid, s3
+
+# Clone project folder from test bucket (tapvid-agent) to local mount folder
+aws s3 sync s3://tapvid-agent/workspace/<id>/ ~/mnt/bucket/tapvid-agent/<id>/ && cd ~/mnt/bucket/tapvid-agent/<id>/
+
+# Clone project folder from prod bucket (tapvid-agent-prod) to local mount folder
+aws s3 sync s3://tapvid-agent-prod/workspace/<id>/ ~/mnt/bucket/tapvid-agent-prod/<id>/ && cd ~/mnt/bucket/tapvid-agent-prod/<id>/

@@ -1,3 +1,8 @@
 finder:
   command: fzf
   overrides: --height 40%
+
+cheats:
+  paths:
+    - /Users/zzh/.config/navi/cheats
+    - /Users/zzh/.local/share/navi/cheats
