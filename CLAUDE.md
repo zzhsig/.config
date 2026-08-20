@@ -17,6 +17,14 @@ Each subdirectory is an independent tool's config:
 - **`gh/config.yml`** — GitHub CLI. Uses HTTPS protocol. Alias: `gh co` → `gh pr checkout`.
 - **`git/ignore`** — Global gitignore (ignores `.claude/settings.local.json`).
 - **`uv/`** — uv Python package manager receipt (installed to `~/.local/bin`).
+- **`.emacs.d/`** — Emacs config (Emacs 31.1). This is its own git repo (remote
+  `zzhjerry/jackrabbit-init`), nested inside this one and listed in `.gitignore`, so commit
+  it separately. `~/.emacs.d` is a symlink to it, which is how Emacs finds it. Entry point is
+  `init.el`, which `require`s modules from `lisp/` (core) and `packages/` (features) in
+  dependency order. `use-package-always-ensure` is `t`, so packages auto-install from MELPA.
+  Verify any change with `emacs --batch --load ~/.emacs.d/init.el` — it must produce no
+  errors or warnings. The repo's own `.claude/skills/` has `emacs-config-verifier` and
+  `fix-emacs` for this.
 
 ## Cross-tool Keybinding Chain
 
@@ -27,6 +35,20 @@ Karabiner, Ghostty, and Neovim keybindings are tightly coupled:
 3. **Neovim** maps `<M-BS>` (which is `ESC DEL`) → `<C-w>` (backward delete word)
 
 Changing any link in this chain will break word-delete behavior. Test all three configs together when modifying keyboard mappings.
+
+## Emacs Install
+
+Emacs is the **prebuilt** `emacs-plus-app@next` cask (currently 31.1), not the
+`emacs-plus@31` formula — the formula has no bottle and builds from a ~700MB git clone
+plus a long compile, while the cask is the same emacs-plus build (same macOS patches,
+xwidgets included) shipped as a binary. Upgrade with:
+
+    brew upgrade --cask emacs-plus-app@next
+
+`/Applications/Emacs.app` is owned by the cask; do not hand-copy an app there (a stale
+copy is what caused a `libjpeg.10.dylib` load failure after a Homebrew `jpeg` bump).
+`emacs-plus@30` is still installed but `brew unlink`ed as a fallback; remove with
+`brew uninstall emacs-plus@30` to reclaim ~213MB.
 
 ## Editing Conventions
 
