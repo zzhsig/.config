@@ -18,12 +18,12 @@
             "default": {
                 "x2c": {
                     "id": "",
-                    "command": ":hide-fields timestamp trace_id project_id",
-                    "alt-msg": "Pressed ,: hid timestamp/trace_id/project_id  (press . to show)"
+                    "command": ":hide-fields timestamp trace_id",
+                    "alt-msg": "Pressed ,: hid timestamp/trace_id  (press . to show)"
                 },
                 "x2e": {
                     "id": "",
-                    "command": ":show-fields timestamp trace_id project_id",
+                    "command": ":show-fields timestamp trace_id",
                     "alt-msg": "Pressed .: showing all fields  (press , to hide again)"
                 }
             }
@@ -42,6 +42,14 @@
                     },
                     "xml-decl": {
                         "pattern": "<!([^ >=!]+)[^>]*>"
+                    }
+                }
+            },
+            "night-owl": {
+                "syntax-styles": {
+                    "string": {
+                        "color": "#8fa3b8",
+                        "bold": false
                     }
                 }
             }

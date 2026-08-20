@@ -28,57 +28,56 @@
         "value": {
             "thread": {
                 "kind": "string",
-                "identifier": true,
+                "hidden": true,
                 "description": "Thread name"
+            },
+            "level": {
+                "kind": "string",
+                "hidden": true,
+                "description": "Log level text (hidden; severity still shown via row color)"
             },
             "logger": {
                 "kind": "string",
-                "identifier": true,
+                "hidden": true,
                 "description": "Logger class"
             },
             "trace_id": {
                 "kind": "string",
-                "identifier": true,
+                "hidden": true,
                 "description": "MDC trace ID"
             },
             "span_id": {
                 "kind": "string",
-                "identifier": true,
+                "hidden": true,
                 "description": "MDC span ID"
             },
             "project_id": {
                 "kind": "string",
-                "identifier": true,
+                "hidden": true,
                 "description": "MDC project ID (canonical numeric cross-service key)"
             },
             "class_name": {
                 "kind": "string",
-                "identifier": true,
                 "description": "Controller class name"
             },
             "method_name": {
                 "kind": "string",
-                "identifier": true,
                 "description": "Controller method name"
             },
             "request_uri": {
                 "kind": "string",
-                "identifier": true,
                 "description": "Request URI"
             },
             "http_method": {
                 "kind": "string",
-                "identifier": true,
                 "description": "HTTP method"
             },
             "req_type": {
                 "kind": "string",
-                "identifier": true,
                 "description": "Log entry type (REQUEST/RESPONSE)"
             },
             "user_id": {
                 "kind": "string",
-                "identifier": true,
                 "description": "Authenticated user ID"
             },
             "exec_time": {
@@ -110,14 +109,9 @@
             }
         },
         "highlights": {
-            "trace_id_val": {
-                "pattern": "trace_id=[a-f0-9]+",
-                "color": "#f5c2e7",
-                "background-color": ""
-            },
-            "project_id_val": {
-                "pattern": "project_id=\\d+",
-                "color": "#89b4fa",
+            "args_val": {
+                "pattern": "\"args\":\\[.*\\](?=,\"methodName\")",
+                "color": "#c792ea",
                 "background-color": ""
             },
             "request_uri": {
@@ -125,9 +119,9 @@
                 "color": "#a6e3a1",
                 "background-color": ""
             },
-            "exec_time": {
-                "pattern": "\"executionTime\":\"[^\"]+\"",
-                "color": "#f9e2af",
+            "result_val": {
+                "pattern": "\"result\":\"(?:[^\"\\\\]|\\\\.)*\"",
+                "color": "#c792ea",
                 "background-color": ""
             },
             "error_level": {

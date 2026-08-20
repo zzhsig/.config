@@ -31,8 +31,7 @@
             },
             "project_id": {
                 "kind": "string",
-                "identifier": true,
-                "hidden": true
+                "identifier": true
             },
             "module": {
                 "kind": "string",

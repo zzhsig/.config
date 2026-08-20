@@ -2,7 +2,7 @@
   "theme": "light",
   "accent": "#0f766e",
   "contentWidth": "standard",
-  "textScale": 1.05,
+  "textScale": 1,
   "readingFont": "sans",
   "showShortcutHints": true,
   "terminalApp": "Ghostty",
